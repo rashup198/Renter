@@ -1,51 +1,77 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const SignUp = () => {
+export default function SignUp() {
+  const [formData, setFormData] = useState({});
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.success === false) {
+        console.error(data.message);
+        return;
+      }
+      
+      
+      navigate('/sign-in');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(formData);
   return (
-    <div>
+    <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
-      <form className='flex flex-col gap-2a items-center'>
+      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input
-          className='border border-gray-400 rounded-md w-80 h-10 px-2 my-2'
           type='text'
           placeholder='username'
+          className='border p-3 rounded-lg'
           id='username'
+          onChange={handleChange}
         />
         <input
-          className='border border-gray-400 rounded-md w-80 h-10 px-2 my-2'
           type='email'
           placeholder='email'
+          className='border p-3 rounded-lg'
           id='email'
+          onChange={handleChange}
         />
         <input
-          className='border border-gray-400 rounded-md w-80 h-10 px-2 my-2'
           type='password'
           placeholder='password'
+          className='border p-3 rounded-lg'
           id='password'
-        />
-        <input
-          className='border border-gray-400 rounded-md w-80 h-10 px-2 my-2'
-          type='password'
-          placeholder='confirm password'
-          id='confirmPassword'
+          onChange={handleChange}
         />
 
-        <button className='bg-slate-700 hover:opacity-90 uppercase  text-white disabled:opacity-80 font-bold p-3 w-[320px] mt-[30px] rounded-lg'> 
+        <button
+          
+          className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
+        >
           Sign Up
         </button>
-      </form>
-
-      <div className="px-[33px] my-2 mt-5 ">
-        <Link to={"/sign-in"}><span>Have an account?</span> <span className='text-blue-700 ml-1'>Sign in</span> </Link>
         
+      </form>
+      <div className='flex gap-2 mt-5'>
+        <p>Have an account?</p>
+        <Link to={'/sign-in'}>
+          <span className='text-blue-700'>Sign in</span>
+        </Link>
       </div>
-
-
-
-
+     
     </div>
-  )
+  );
 }
-
-export default SignUp
