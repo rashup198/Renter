@@ -9,7 +9,9 @@ import {
 import { app } from '../firebase';
 
 import { useDispatch } from 'react-redux';
-import  {updateUserStart, updateUserSuccess, updateUserFailure} from '../redux/user/userSlice';
+import  {updateUserStart, updateUserSuccess, updateUserFailure,deleteUserFailure,deleteUserStart,deleteUserSuccess } from '../redux/user/userSlice';
+import { useNavigate  } from 'react-router-dom';
+
 
 
 export default function Profile() {
@@ -21,6 +23,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -93,6 +96,8 @@ export default function Profile() {
         return;
       }
       dispatch(deleteUserSuccess(data));
+      navigate('/sign-up');
+      
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
     }
