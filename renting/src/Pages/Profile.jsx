@@ -9,6 +9,8 @@ import {
 import { app } from '../firebase';
 
 import { useDispatch } from 'react-redux';
+import  {updateUserStart, updateUserSuccess, updateUserFailure} from '../redux/user/userSlice';
+
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -63,7 +65,7 @@ export default function Profile() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        },
+        }, 
         body: JSON.stringify(formData),
       });
       const data = await res.json();
