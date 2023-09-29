@@ -9,7 +9,7 @@ import {
 import { app } from '../firebase';
 
 import { useDispatch } from 'react-redux';
-import  {updateUserStart, updateUserSuccess, updateUserFailure,deleteUserFailure,deleteUserStart,deleteUserSuccess } from '../redux/user/userSlice';
+import  {updateUserStart, updateUserSuccess, updateUserFailure,deleteUserFailure,deleteUserStart,deleteUserSuccess,signOutUserStart } from '../redux/user/userSlice';
 import { useNavigate  } from 'react-router-dom';
 
 
@@ -113,6 +113,7 @@ export default function Profile() {
         return;
       }
       dispatch(deleteUserSuccess(data));
+      navigate('/sign-in'); 
     } catch (error) {
       dispatch(deleteUserFailure(data.message));
     }
