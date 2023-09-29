@@ -33,9 +33,7 @@ function OAuth() {
       console.log('could not sign in with google', error);
     }
   };
-  return (
-    
-      
+  return (  
     <button onClick={handleGoogleClick} type='button' className='flex justify-center items-center gap-2
     bg-gray-500 text-white p-3 rounded-md uppercase hover:opacity-80'>
     <span className='text-2xl'><FcGoogle/></span>
