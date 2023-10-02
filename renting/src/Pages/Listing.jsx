@@ -13,7 +13,7 @@ import {
   FaMapMarkedAlt,
   FaMapMarkerAlt,
   FaParking,
-  FaShare,
+  FaShareAlt,
 } from 'react-icons/fa';
 
 
@@ -26,6 +26,7 @@ export default function Listing() {
   const params = useParams();
   const { currentUser } = useSelector((state) => state.user);
   const [showMore, setShowMore] = useState(false);
+  
 
   const toggleDescription = () => {
     setShowMore(!showMore);
@@ -76,7 +77,9 @@ export default function Listing() {
           <div className='fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer'>
 
           
-            <FaShare
+          
+            
+            <FaShareAlt
               className='text-slate-500'
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
@@ -86,6 +89,7 @@ export default function Listing() {
                 }, 2000);
               }}
             />
+
           </div>
           {copied && (
             <p className='fixed top-[23%] right-[5%] z-10 rounded-md bg-slate-100 p-2'>

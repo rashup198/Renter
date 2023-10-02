@@ -104,6 +104,8 @@ const Search = () => {
         navigate(`/search?${searchQuery}`)
     }
 
+    const onShowMoreClick = () => {
+    }
   return (
     <div className='flex flex-col md:flex-row'>
       <div className='p-7  border-b-2 md:border-r-2 md:min-h-screen'>
@@ -210,7 +212,7 @@ const Search = () => {
         <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>
           Result
         </h1>
-        {/* <div className='p-7 flex flex-wrap gap-4'>
+        <div className='p-7 flex flex-wrap gap-4'>
           {!loading && listings.length === 0 && (
             <p className='text-xl text-slate-700'>No listing found!</p>
           )}
@@ -234,7 +236,7 @@ const Search = () => {
               Show more
             </button>
           )}
-        </div> */}
+        </div>
       </div>
     </div>
   )
