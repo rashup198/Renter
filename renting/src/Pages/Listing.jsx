@@ -74,6 +74,8 @@ export default function Listing() {
             ))}
           </Swiper>
           <div className='fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer'>
+
+          
             <FaShare
               className='text-slate-500'
               onClick={() => {
@@ -111,7 +113,17 @@ export default function Listing() {
                 <p className='bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
                     Book now and get 10% off
                 </p>
-
+                
+                <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${listing.address}`}
+                    target='_blank'
+                    rel='noreferrer'
+                    className='bg-slate-500 text-white px-4 py-2 rounded-md'
+                >
+                    <FaMapMarkedAlt className='inline-block mr-2' />
+                    View on map
+                </a>
+           
               </div>
               {listing.offer && (
                 <div className=" flex gap-2">
@@ -125,6 +137,7 @@ export default function Listing() {
                 <p className=' text-black text-center p-1 rounded-md'>
                   ₹{+listing.regularPrice - +listing.discountPrice} OFF
                 </p>
+                
                 </div>
               )}
             <div className='flex gap-0 align-baseline'>
@@ -160,6 +173,15 @@ export default function Listing() {
                 {listing.furnished ? 'Furnished' : 'Unfurnished'}
               </li>
             </ul>
+
+            <button className=' bg-gray-500 h-[40px] rounded-lg mt-[30px] text-white font-bold' >
+                Book now
+            </button>
+           
+          </div>
+
+          <div>
+         
           </div>
         </div>
       )}
