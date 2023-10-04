@@ -8,7 +8,7 @@ export default function ListingItem({ listing }) {
         <img
           src={
             listing.imageUrls[0] ||
-            'https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.jpg?width=595&height=400&name=real-estate-business-compressor.jpg'
+            'https://imgs.search.brave.com/wQq40-OKU-s8cUZq2b6wIiLApJOJNhxl7qetbWZoPQ4/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTgz/ODgxNjY5L3Bob3Rv/L2hvdXNlLmpwZz9z/PTYxMng2MTImdz0w/Jms9MjAmYz0zZmM4/Z3IySG9MUXdnSUpu/RTU2OFNwdURqNHRn/a1FlTUt1bXRDTW52/UG9BPQ'
           }
           alt='listing cover'
           className='h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-scale duration-300'
@@ -29,8 +29,8 @@ export default function ListingItem({ listing }) {
           <p className='text-slate-500 mt-2 font-semibold '>
           ₹ 
             {listing.offer
-              ? listing.discountPrice.toLocaleString('en-US')
-              : listing.regularPrice.toLocaleString('en-US')}
+              ? listing.discountPrice.toLocaleString('en-IN')
+              : listing.regularPrice.toLocaleString('en-IN')}
             {listing.type === 'rent' && ' / month'}
           </p>
           <div className='text-slate-700 flex gap-4'>
