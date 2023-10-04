@@ -1,111 +1,153 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate ,useLocation} from 'react-router-dom';
+import ListingItem from '../Componets/ListingItem';
 
-const Search = () => {
-    const [listings, setListings] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [showMore, setShowMore] = useState(true)
-   
+export default function Search() {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const [sidebardata, setSidebardata] = useState({
-        searchTerm: '',
-        type: 'all',
-        parking: false,
-        furnished: false,
-        offer: false,
-        sort: 'created_at',
-        order: 'desc',
+  const [sidebardata, setSidebardata] = useState({
+    searchTerm: '',
+    type: 'all',
+    parking: false,
+    furnished: false,
+    offer: false,
+    sort: 'created_at',
+    order: 'desc',
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [listings, setListings] = useState([]);
+  const [showMore, setShowMore] = useState(false);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get('searchTerm');
+    const typeFromUrl = urlParams.get('type');
+    const parkingFromUrl = urlParams.get('parking');
+    const furnishedFromUrl = urlParams.get('furnished');
+    const offerFromUrl = urlParams.get('offer');
+    const sortFromUrl = urlParams.get('sort');
+    const orderFromUrl = urlParams.get('order');
+
+    if (
+      searchTermFromUrl ||
+      typeFromUrl ||
+      parkingFromUrl ||
+      furnishedFromUrl ||
+      offerFromUrl ||
+      sortFromUrl ||
+      orderFromUrl
+    ) {
+      setSidebardata({
+        searchTerm: searchTermFromUrl || '',
+        type: typeFromUrl || 'all',
+        parking: parkingFromUrl === 'true' ? true : false,
+        furnished: furnishedFromUrl === 'true' ? true : false,
+        offer: offerFromUrl === 'true' ? true : false,
+        sort: sortFromUrl || 'created_at',
+        order: orderFromUrl || 'desc',
       });
-      console.log(listings);
-      useEffect(() => {
-        const urlPrams = new URLSearchParams(location.search)
-        const searchTermFromUrl = urlPrams.get('searchTerm') 
-        const typeFromUrl = urlPrams.get('type')
-        const parkingFromUrl = urlPrams.get('parking')
-        const furnishedFromUrl = urlPrams.get('furnished')
-        const offerFromUrl = urlPrams.get('offer')
-        const sortFromUrl = urlPrams.get('sort')
-        const orderFromUrl = urlPrams.get('order')
-
-        if(
-            searchTermFromUrl ||
-            typeFromUrl ||
-            parkingFromUrl ||
-            furnishedFromUrl ||
-            offerFromUrl ||
-            sortFromUrl ||
-            orderFromUrl
-        ){
-
-            setSidebardata({
-                searchTerm: searchTermFromUrl || '',
-                type: typeFromUrl || 'all',
-                parking: parkingFromUrl === "true" ? true : false,
-                furnished: furnishedFromUrl === "true" ? true : false,
-                offer: offerFromUrl === "true" ? true : fals,
-                sort: sortFromUrl || 'created_at',
-                order: orderFromUrl || 'desc',
-            })
-        }
-
-        const fetchListings = async () => {
-            setLoading(true)
-            const searchQuery = urlPrams.toString()
-            const res = await fetch(`/api/listings?${searchQuery}`)
-            const data = await res.json()
-            setListings(data)
-            setLoading(false)
-        }
-
-           
-    }, [location.search])
-
-
-
-    const navigate = useNavigate()
-
-
-
-    const handleChange = (e) => {
-        if(e.target.id === 'all' || e.target.id === 'rent' || e.target.id === 'sale'){
-            setSidebardata({...sidebardata, type: e.target.id})
-
-        }
-
-        if(e.target.id === 'searchTerm'){
-            setSidebardata({...sidebardata, searchTerm: e.target.value})
-        }
-
-        if(e.target.id === 'offer' || e.target.id === 'parking' || e.target.id === 'furnished'){
-            setSidebardata({...sidebardata, [e.target.id]: e.target.checked || e.target.checked==='true'? true : false})
-        }
-
-        if(e.target.id === 'sort_order'){
-            const sort = e.target.value.split('_')[0] || 'created_at'
-            const order = e.target.value.split('_')[1] || 'desc'
-
-            setSidebardata({...sidebardata, sort, order})
-        }
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const urlPrams = new URLSearchParams()
-        urlPrams.set('searchTerm', sidebardata.searchTerm)
-        urlPrams.set('type', sidebardata.type)
-        urlPrams.set('parking', sidebardata.parking)
-        urlPrams.set('furnished', sidebardata.furnished)
-        urlPrams.set('offer', sidebardata.offer)
-        urlPrams.set('sort', sidebardata.sort)
-        urlPrams.set('order', sidebardata.order)
+    const fetchListings = async () => {
+      setLoading(true);
+      setShowMore(false);
+      const searchQuery = urlParams.toString();
+      try {
+        const res = await fetch(`/api/listing/get?${searchQuery}`);
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          if (data.length > 8) {
+            setShowMore(true);
+          } else {
+            setShowMore(false);
+          }
+          setListings(data);
+        } else {
+          console.error('Data received from API is not an array:', data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+      setLoading(false);
+    };
 
-        const searchQuery = urlPrams.toString() 
-        navigate(`/search?${searchQuery}`)
+    fetchListings();
+  }, [location.search]);
+
+  const handleChange = (e) => {
+    if (
+      e.target.id === 'all' ||
+      e.target.id === 'rent' ||
+      e.target.id === 'sale'
+    ) {
+      setSidebardata({ ...sidebardata, type: e.target.id });
     }
 
-    const onShowMoreClick = () => {
+    if (e.target.id === 'searchTerm') {
+      setSidebardata({ ...sidebardata, searchTerm: e.target.value });
     }
+
+    if (
+      e.target.id === 'parking' ||
+      e.target.id === 'furnished' ||
+      e.target.id === 'offer'
+    ) {
+      setSidebardata({
+        ...sidebardata,
+        [e.target.id]: e.target.checked,
+      });
+    }
+
+    if (e.target.id === 'sort_order') {
+      const sort = e.target.value.split('_')[0] || 'created_at';
+      const order = e.target.value.split('_')[1] || 'desc';
+      setSidebardata({ ...sidebardata, sort, order });
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams();
+    urlParams.set('searchTerm', sidebardata.searchTerm);
+    urlParams.set('type', sidebardata.type);
+    urlParams.set('parking', sidebardata.parking.toString());
+    urlParams.set('furnished', sidebardata.furnished.toString());
+    urlParams.set('offer', sidebardata.offer.toString());
+    urlParams.set('sort', sidebardata.sort);
+    urlParams.set('order', sidebardata.order);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
+
+  const onShowMoreClick = async () => {
+    const numberOfListings = listings.length;
+    const startIndex = numberOfListings;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('startIndex', startIndex);
+    const searchQuery = urlParams.toString();
+    try {
+      const res = await fetch(`/api/listing/get?${searchQuery}`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        if (data.length < 9) {
+          setShowMore(false);
+        }
+        setListings([...listings, ...data]);
+      } else {
+        console.error('Data received from API is not an array:', data);
+      }
+    } catch (error) {
+      console.error('Error fetching more data:', error);
+    }
+  };
   return (
     <div className='flex flex-col md:flex-row'>
       <div className='p-7  border-b-2 md:border-r-2 md:min-h-screen'>
@@ -210,7 +252,7 @@ const Search = () => {
       </div>
       <div className='flex-1'>
         <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>
-          Result
+          Listing results:
         </h1>
         <div className='p-7 flex flex-wrap gap-4'>
           {!loading && listings.length === 0 && (
@@ -239,7 +281,5 @@ const Search = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
-
-export default Search
