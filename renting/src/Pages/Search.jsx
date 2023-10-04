@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate ,useLocation} from 'react-router-dom';
 import ListingItem from '../Componets/ListingItem';
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function Search() {
   const navigate = useNavigate();
@@ -154,12 +155,12 @@ export default function Search() {
         <form onSubmit={handleSubmit} className='flex flex-col gap-8'>
           <div className='flex items-center gap-2'>
             <label className='whitespace-nowrap font-semibold'>
-              Search Term:
+              Search:
             </label>
             <input
               type='text'
               id='searchTerm'
-              placeholder='Search...'
+              placeholder='Search here...'
               className='border rounded-lg p-3 w-full'
               value={sidebardata.searchTerm}
               onChange={handleChange}
@@ -260,7 +261,12 @@ export default function Search() {
           )}
           {loading && (
             <p className='text-xl text-slate-700 text-center w-full'>
-              Loading...
+              
+              <ClipLoader
+              color="#000000"
+              loading={loading}
+              size={70}
+            />
             </p>
           )}
 
