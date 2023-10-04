@@ -6,7 +6,7 @@ import {
   ref,
   uploadBytesResumable,
 } from 'firebase/storage';
-import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import { app } from '../firebase';
 import {
   updateUserStart,
@@ -31,6 +31,7 @@ export default function Profile() {
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (file) {
@@ -102,6 +103,8 @@ export default function Profile() {
         return;
       }
       dispatch(deleteUserSuccess(data));
+      navigate('/');
+      
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
     }
@@ -117,10 +120,12 @@ export default function Profile() {
         return;
       }
       dispatch(deleteUserSuccess(data));
+      navigate('/sign-in');
     } catch (error) {
       dispatch(deleteUserFailure(data.message));
     }
   };
+
 
   const handleShowListings = async () => {
     try {
@@ -159,7 +164,6 @@ export default function Profile() {
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
-      <div><Toaster/></div>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input
