@@ -6,14 +6,19 @@ import {
   ref,
   uploadBytesResumable,
 } from 'firebase/storage';
+import toast, { Toaster } from 'react-hot-toast';
 import { app } from '../firebase';
-
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  signOutUserStart,
+} from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
-import  {updateUserStart, updateUserSuccess, updateUserFailure,deleteUserFailure,deleteUserStart,deleteUserSuccess,signOutUserStart } from '../redux/user/userSlice';
-import { Link, useNavigate  } from 'react-router-dom';
-import { set } from 'mongoose';
-
-
+import { Link } from 'react-router-dom';
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -22,12 +27,10 @@ export default function Profile() {
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
-  const [updateSuccess, setUpdateSuccess] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [updateSuccess, setUpdateSuccess] = useState(null); // Changed to null
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
-
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (file) {
@@ -71,7 +74,7 @@ export default function Profile() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        }, 
+        },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
@@ -99,8 +102,6 @@ export default function Profile() {
         return;
       }
       dispatch(deleteUserSuccess(data));
-      navigate('/sign-up');
-      
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
     }
@@ -116,26 +117,26 @@ export default function Profile() {
         return;
       }
       dispatch(deleteUserSuccess(data));
-      navigate('/sign-in'); 
     } catch (error) {
       dispatch(deleteUserFailure(data.message));
     }
   };
 
-  const handelShowListings = async () => {
-      try {
-        setShowListingsError(false);
-        const res = await fetch(`/api/user/listing/${currentUser._id}`);
-        const data = await res.json();
-        if (data.success === false) {
-          setShowListingsError(true);
-          return;
-        }
-        setUserListings(data);
-      } catch (error) {
+  const handleShowListings = async () => {
+    try {
+      setShowListingsError(false);
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+      if (data.success === false) {
         setShowListingsError(true);
+        return;
       }
-  }
+
+      setUserListings(data);
+    } catch (error) {
+      setShowListingsError(true);
+    }
+  };
 
   const handleListingDelete = async (listingId) => {
     try {
@@ -147,15 +148,18 @@ export default function Profile() {
         console.log(data.message);
         return;
       }
-      setUserListings((prev) => prev.filter((listing) => listing._id !== listingId));
+
+      setUserListings((prev) =>
+        prev.filter((listing) => listing._id !== listingId)
+      );
     } catch (error) {
-      
+      console.log(error.message);
     }
-    
-  }
+  };
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
+      <div><Toaster/></div>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input
@@ -213,7 +217,10 @@ export default function Profile() {
         >
           {loading ? 'Loading...' : 'Update'}
         </button>
-        <Link className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-80' to={"/create-listing"}>
+        <Link
+          className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95'
+          to={'/create-listing'}
+        >
           Create Listing
         </Link>
       </form>
@@ -230,15 +237,17 @@ export default function Profile() {
       </div>
 
       <p className='text-red-700 mt-5'>{error ? error : ''}</p>
-      <p className='text-green-700 mt-5'>
-        {updateSuccess ? 'User is updated successfully!' : ''}
+      <p className='text-green-700 mt-5 mb-3'>
+        {updateSuccess !== null ? (updateSuccess ? "User is updated successfully!" : "Some error occurred! Try again.") : ""}
+      </p>
+      <button onClick={handleShowListings} className='text-green-700 w-full'>
+        Show Listings
+      </button>
+      <p className='text-red-700 mt-5'>
+        {showListingsError ? 'Error showing listings' : ''}
       </p>
 
-         <button onClick={handelShowListings} className='text-green-700 w-full'>Show Listings</button>   
-         <p className='text-red-700 mt-5'>
-        {showListingsError ? 'Error showing listings!' : ''}
-         </p>
-         {userListings && userListings.length > 0 && (
+      {userListings && userListings.length > 0 && (
         <div className='flex flex-col gap-4'>
           <h1 className='text-center mt-7 text-2xl font-semibold'>
             Your Listings
@@ -277,9 +286,6 @@ export default function Profile() {
           ))}
         </div>
       )}
-
-      </div>
-  
-    
+    </div>
   );
 }
