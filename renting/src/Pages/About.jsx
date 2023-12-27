@@ -13,7 +13,7 @@ const About = () => {
         I have crafted numerous projects utilizing <span className="font-bold">HTML, CSS, Tailwind CSS, JavaScript, React.js, Node.js, and Express.js</span>. Some of my notable projects include GitHub profile finder, shopping cart, password generator, Discord Clone, Microsoft Clone, VIT Cultural Fest Clone, and more. Check out my projects on <a className="text-yellow-300 font-bold hover:underline" href="https://github.com/rashup198">GitHub</a>.
       </p>
       <p className="text-xl mb-4">
-        View my <a  className="text-yellow-300 font-bold hover:underline" href="https://drive.google.com/file/d/1ceb52YEZT-glKFeF0SR1r6f-_X4UwEIj/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">Resume</a>.
+        View my <a  className="text-yellow-300 font-bold hover:underline" href="https://drive.google.com/file/d/1tcO-4lr-kC1a5wFqGyBdCMRQK4Rd6Ejt/view" target="_blank" rel="noopener noreferrer">Resume</a>.
       </p>
       <p className= "text-xl mb-4">
         Explore my portfolio: <a  className="text-yellow-300 font-bold hover:underline" href="https://priyanshu-pandey.netlify.app/" target="_blank" rel="noopener noreferrer">Portfolio</a>.
