@@ -8,13 +8,15 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 dotenv.config();
  
-mongoose
-  .connect(process.env.MONGO)
-  .then(() => {
-    console.log('Connected to MongoDB!');
-  })
-  .catch((err) => {
-    console.log(err);
+
+mongoose.connect("mongodb+srv://rashup198:21Blc1377@cluster0.ak1ovd0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log('Successfully connected to the database');
+}).catch(err => {
+      console.log('Could not connect to the database. Exiting now...', err);
+      process.exit();
   });
 
   const __dirname = path.resolve();
