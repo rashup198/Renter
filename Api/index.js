@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors'; 
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import listingRouter from './routes/listing.route.js';
@@ -23,6 +24,11 @@ mongoose.connect("mongodb+srv://rashup198:21Blc1377@cluster0.ak1ovd0.mongodb.net
 const __dirname = path.resolve();
 
 const app = express();
+
+app.use(cors({
+  origin: "*",
+  credentials: true
+}));
 
 app.use(express.json());
 app.use(cookieParser());
