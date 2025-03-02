@@ -56,7 +56,7 @@ export default function Search() {
       setShowMore(false);
       const searchQuery = urlParams.toString();
       try {
-        const res = await fetch(`/api/listing/get?${searchQuery}`);
+        const res = await fetch(`https://priyanshurenting.onrender.com/api/listing/get?${searchQuery}`);
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
