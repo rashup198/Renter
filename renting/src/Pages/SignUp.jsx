@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link,useNavigate  } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../Componets/OAuth.jsx';
 
 export default function SignUp() {
@@ -7,9 +7,11 @@ export default function SignUp() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -22,7 +24,7 @@ export default function SignUp() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
+      
       if (data.success === false) {
         setLoading(false);
         setError(data.message);
@@ -64,21 +66,19 @@ export default function SignUp() {
         />
 
         <button
-           disabled={loading}
+          disabled={loading}
           className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
         >
           {loading ? 'Loading...' : 'Sign Up'}
         </button>
 
-        <OAuth>
-
-        </OAuth>
+        <OAuth />
         
       </form>
       <div className='flex gap-2 mt-5'>
         <p>Have an account?</p>
         <Link to={'/sign-in'}>
-          <span className='text-blue-700'>Sign up</span>
+          <span className='text-blue-700'>Sign in</span>
         </Link>
       </div>
       {error && (
@@ -86,7 +86,6 @@ export default function SignUp() {
           {error}
         </div>
       )}
-     
     </div>
   );
 }
