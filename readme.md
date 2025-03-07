@@ -1,6 +1,6 @@
-# Streamline
+# Aawash
 
-Streamline is a platform designed for YouTubers to manage video uploads and collaborate with editors, simplifying the workflow for approving and uploading videos remotely.
+Aawash is a platform that connects landlords with college students looking for places to live. It makes it easy for landlords to list their properties and for students to find suitable accommodations. With features like user registration and secure login, Aawash helps simplify the process of finding housing.
 
 ## Features
 
