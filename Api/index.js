@@ -10,7 +10,7 @@ import path from 'path';
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 // MongoDB Connection
 mongoose.connect("mongodb+srv://rashup198:21Blc1377@cluster0.ak1ovd0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
