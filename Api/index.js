@@ -29,8 +29,8 @@ const app = express();
 
 //cors
 app.use(cors({
-  // origin: ['http://localhost:5173', 'https://priyanshurenting.netlify.app/'],
-  origin: 'https://priyanshurenting.netlify.app/',
+  origin: ['http://localhost:5173', 'https://priyanshurenting.netlify.app/'],
+  // origin: 'https://priyanshurenting.netlify.app/',
   credentials: true, 
 }));
 
