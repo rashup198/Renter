@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import { signInStart, signInFailure, signInSuccess } from '../redux/user/userSlice';
 import OAuth from '../Componets/OAuth.jsx';
 
@@ -9,32 +10,30 @@ export default function SignIn() {
   const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    dispatch(signInStart());
+
     try {
-      dispatch(signInStart());
-      const res = await fetch('https://priyanshurenting.onrender.com/api/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      const res = await axios.post('https://priyanshurenting.onrender.com/api/auth/signin', formData, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true, 
       });
-      const data = await res.json();
-      
-      if (data.success === false) {
-        dispatch(signInFailure(data.message));
+
+      if (!res.data.success) {
+        dispatch(signInFailure(res.data.message || 'Login failed'));
         return;
       }
-      dispatch(signInSuccess(data));
+
+      dispatch(signInSuccess(res.data));
       navigate('/');
     } catch (error) {
-      dispatch(signInFailure(error.message));
+      dispatch(signInFailure(error.response?.data?.message || 'Something went wrong'));
     }
   };
 
@@ -44,14 +43,14 @@ export default function SignIn() {
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input
           type='email'
-          placeholder='email'
+          placeholder='Email'
           className='border p-3 rounded-lg'
           id='email'
           onChange={handleChange}
         />
         <input
           type='password'
-          placeholder='password'
+          placeholder='Password'
           className='border p-3 rounded-lg'
           id='password'
           onChange={handleChange}
